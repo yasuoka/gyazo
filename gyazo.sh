@@ -51,7 +51,12 @@ if ! which xclip > /dev/null 2>&1; then
 fi
 
 if [ $# -gt 0 ]; then
-	_img=$1
+	case $1 in
+	*.png)	_img=$1;;
+	*)	_img=$(mktemp -t ".$(echo ${0##*/} | tr '.' '_')XXXXXXX")
+		TMP="$TMP $_img"
+		convert $1 png:$_img || abort
+	esac
 else
 	_img=$(mktemp -t ".$(echo ${0##*/} | tr '.' '_')XXXXXXX")
 	TMP="$TMP $_img"
