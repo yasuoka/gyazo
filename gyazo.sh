@@ -41,6 +41,10 @@ if ! which import > /dev/null 2>&1; then
 	echo "Require \"import\" (ImageMagick) installed"
 	exit 1
 fi
+if ! which convert > /dev/null 2>&1; then
+	echo "Require \"convert\" (ImageMagick) installed"
+	exit 1
+fi
 if ! which curl > /dev/null 2>&1; then
 	echo "Require \"curl\" installed"
 	exit 1
