@@ -7,7 +7,7 @@ Prerequisites
 -------------
 
 - curl
-- convert (ImageMagick)
+- ImageMagick is installed and "import" command is working
 - xclip (optional)
   - if the script finds the xclip, the image URL is copied to the X11
     clipboard
