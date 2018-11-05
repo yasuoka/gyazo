@@ -67,16 +67,16 @@ else
 	import png:$_img || abort
 fi
 
-CURLOPTS="-H \"User-Agent: Gyazo/1.0\""
+CURLOPTS="-H \"User-Agent: Gyazo/1.0\" -H Expect:"
 ID=$(tr -d '\r\n' < $IDFILE 2>/dev/null)
 if [ -n "$ID" ]; then
-	URL=$(curl $CURLOPTS -s -X POST -F "id=$ID" -F "imagedata=@$_img" \
-	    "$UPLOAD")
+	URL=$(eval curl $CURLOPTS -s -X POST -F "id=\$ID" \
+	    -F "imagedata=@\$_img" "\$UPLOAD")
 else
 	_header_file=$(mktemp -t ".$(echo ${0##*/} | tr '.' '_')XXXXXXXX")
 	TMP="$TMP $_header_file"
-	URL=$(curl $CURLOPTS -D $_header_file -s -X POST -F "imagedata=@$_img" \
-	    "$UPLOAD")
+	URL=$(eval curl $CURLOPTS -D \$_header_file -s -X POST \
+	    -F "imagedata=@$_img" "\$UPLOAD")
 	sed -n '/^X-Gyazo-Id: /s///p' $_header_file > $IDFILE
 fi
 echo $URL
