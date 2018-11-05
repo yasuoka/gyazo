@@ -68,7 +68,7 @@ else
 fi
 
 CURLOPTS="-H \"User-Agent: Gyazo/1.0\""
-ID=$(cat $IDFILE 2>/dev/null)
+ID=$(tr -d '\r\n' < $IDFILE 2>/dev/null)
 if [ -n "$ID" ]; then
 	URL=$(curl $CURLOPTS -s -X POST -F "id=$ID" -F "imagedata=@$_img" \
 	    "$UPLOAD")
