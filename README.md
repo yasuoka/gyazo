@@ -8,6 +8,7 @@ Prerequisites
 
 - curl
 - ImageMagick is installed and "import" command is working
+- xdg-open
 - xclip (optional)
   - if the script finds the xclip, the image URL is copied to the X11
     clipboard

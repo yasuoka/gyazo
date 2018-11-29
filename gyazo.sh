@@ -49,6 +49,10 @@ if ! which curl > /dev/null 2>&1; then
 	echo "Require \"curl\" installed"
 	exit 1
 fi
+if ! which xdg-open > /dev/null 2>&1; then
+	echo "Require \"xdg-open\" installed"
+	exit 1
+fi
 XCLIP=xclip
 if ! which xclip > /dev/null 2>&1; then
 	XCLIP=:
@@ -67,18 +71,21 @@ else
 	import png:$_img || abort
 fi
 
-CURLOPTS="-H \"User-Agent: Gyazo/1.0\" -H Expect:"
+CURLOPTS="-H \"User-Agent: Gyazo/1.0\" -H \"X-Gyazo-Accept-Token: required\" -H Expect:"
 ID=$(tr -d '\r\n' < $IDFILE 2>/dev/null)
+_header_file=$(mktemp -t ".$(echo ${0##*/} | tr '.' '_')XXXXXXXX")
+TMP="$TMP $_header_file"
+
 if [ -n "$ID" ]; then
 	URL=$(eval curl $CURLOPTS -s -X POST -F "id=\$ID" \
 	    -F "imagedata=@\$_img" "\$UPLOAD")
+	sed -n '/^X-Gyazo-Id: /s///p' $_header_file > $IDFILE
 else
-	_header_file=$(mktemp -t ".$(echo ${0##*/} | tr '.' '_')XXXXXXXX")
-	TMP="$TMP $_header_file"
 	URL=$(eval curl $CURLOPTS -D \$_header_file -s -X POST \
 	    -F "imagedata=@$_img" "\$UPLOAD")
-	sed -n '/^X-Gyazo-Id: /s///p' $_header_file > $IDFILE
 fi
+TOKEN=$(sed -n '/^X-Gyazo-Session-Token: /s///p' $_header_file)
 echo $URL
+xdg-open "$URL?token=$TOKEN"
 echo $URL | $XCLIP
 [ -n "$TMP" ] && rm -f $TMP
