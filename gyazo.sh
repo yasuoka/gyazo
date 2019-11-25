@@ -60,6 +60,7 @@ fi
 
 if [ $# -gt 0 ]; then
 	case $1 in
+	*.jpg)	_img=$1;;
 	*.png)	_img=$1;;
 	*)	_img=$(mktemp -t ".$(echo ${0##*/} | tr '.' '_')XXXXXXX")
 		TMP="$TMP $_img"
