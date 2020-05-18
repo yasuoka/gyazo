@@ -79,11 +79,11 @@ TMP="$TMP $_header_file"
 
 if [ -n "$ID" ]; then
 	URL=$(eval curl $CURLOPTS -s -X POST -F "id=\$ID" \
-	    -F "imagedata=@\$_img" "\$UPLOAD")
+	    -F \"imagedata=@\$_img\" "\$UPLOAD")
 	sed -n '/^X-Gyazo-Id: /s///p' $_header_file > $IDFILE
 else
 	URL=$(eval curl $CURLOPTS -D \$_header_file -s -X POST \
-	    -F "imagedata=@$_img" "\$UPLOAD")
+	    -F \"imagedata=@\$_img\" "\$UPLOAD")
 fi
 TOKEN=$(sed -n '/^X-Gyazo-Session-Token: /s///p' $_header_file)
 echo $URL
